@@ -20,7 +20,6 @@ class CreateAuctionsTable extends Migration
             $table->decimal('start_bid_amount', 8, 2);
             $table->text('location');
             $table->dateTime('end_time');
-            $table->boolean('auction_status');
             $table->timestamps();
         });
     }

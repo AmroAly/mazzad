@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     // Auction Routes
     Route::prefix('auctions')->middleware('role:admin')->group(function() {
-        Route::post('create', 'AuctionController@store');        
+        Route::post('create', 'AuctionController@store');
+        Route::delete('delete', 'AuctionController@delete');        
     });
 });

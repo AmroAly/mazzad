@@ -9,6 +9,7 @@ class AuctionController extends Controller
 {
     /**
      * Store Auction in database
+     * 
      * @param Request
      * @return Response
      */
@@ -28,11 +29,27 @@ class AuctionController extends Controller
             'final_price' => $request->start_bid_amount,
             'location' => $request->location,
             'end_time' => $request->end_time,
-            'auction_status' => $request->auction_status
         ]);
 
         return response()->json([
             "message" => "Auction created successflly!"
         ], 201);
+    }
+
+    /**
+     * Delete Auction
+     * 
+     * @param Request
+     * @return Response
+     */
+    public function delete(Request $request)
+    {
+        $auction = Auction::find($request->id);
+        if($auction) {
+            $auction->delete();
+        }
+        return response()->json([
+            "message" => "Ok"
+        ]);
     }
 }

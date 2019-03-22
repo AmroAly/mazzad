@@ -11,5 +11,5 @@ class Auction extends Model
      *
      * @var array
      */
-    protected $fillable = ['car_name', 'final_price', 'start_bid_amount', 'location', 'end_time', 'auction_status'];
+    protected $fillable = ['car_name', 'final_price', 'start_bid_amount', 'location', 'end_time'];
 }
