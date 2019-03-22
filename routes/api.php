@@ -20,4 +20,9 @@ Route::post('/login', 'AuthController@login');
 Route::group(['middleware' => 'auth:api'], function() {
     Route::get('logout', 'AuthController@logout');
     Route::get('user', 'AuthController@user');
+
+    // Auction Routes
+    Route::prefix('auctions')->middleware('role:admin')->group(function() {
+        Route::post('create', 'AuctionController@store');        
+    });
 });
