@@ -27,6 +27,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::get('open', 'AuctionController@openAuctions');
         Route::get('closed', 'AuctionController@closedAuctions');
         Route::post('create', 'AuctionController@store');
+        Route::put('edit/{id}', 'AuctionController@update');
         Route::delete('delete', 'AuctionController@delete');        
     });
 });

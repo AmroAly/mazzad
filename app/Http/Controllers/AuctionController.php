@@ -73,6 +73,34 @@ class AuctionController extends Controller
     }
 
     /**
+     * Update Auction
+     * 
+     * @param Request
+     * @return Response
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'car_name' => 'required|min:2',
+            'start_bid_amount' => 'required|numeric',
+            'location'  => 'required|min:6',
+            'end_time' => 'required|date|after:today'
+        ]);
+        
+        Auction::where('id', $id)->update([
+            'car_name' => $request->car_name,
+            'start_bid_amount' => $request->start_bid_amount,
+            'final_price' => $request->final_price,
+            'location' => $request->location,
+            'end_time' => $request->end_time,
+        ]); 
+
+        return response()->json([
+            "message" => "Auction updated successflly!"
+        ]);
+    }
+
+    /**
      * Delete Auction
      * 
      * @param Request
