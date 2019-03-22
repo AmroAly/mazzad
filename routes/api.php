@@ -26,8 +26,14 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::get('all', 'AuctionController@allAuctions');
         Route::get('open', 'AuctionController@openAuctions');
         Route::get('closed', 'AuctionController@closedAuctions');
+        Route::get('{id}/bids', 'AuctionController@bids');
         Route::post('create', 'AuctionController@store');
         Route::put('edit/{id}', 'AuctionController@update');
         Route::delete('delete', 'AuctionController@delete');        
+    });
+
+    // Bid Routes
+    Route::prefix('bids')->group(function() {
+        Route::post('add', 'BidController@store');
     });
 });

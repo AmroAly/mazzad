@@ -76,6 +76,7 @@ class AuctionController extends Controller
      * Update Auction
      * 
      * @param Request
+     * @param id
      * @return Response
      */
     public function update(Request $request, $id)
@@ -116,5 +117,20 @@ class AuctionController extends Controller
         return response()->json([
             "message" => "Ok"
         ]);
+    }
+
+    /**
+     * Get all bids of Auction
+     * 
+     * @param id
+     * @return Response
+     */
+    public function bids($id)
+    {
+        $auction = Auction::find($id);
+        if($auction)
+            return response()->json([
+                "bids" => $auction->bids()->get()
+            ]);
     }
 }

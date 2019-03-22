@@ -48,4 +48,12 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = bcrypt($password);
     }
+
+    /**
+     * Get the Bids for the User.
+     */
+    public function Bids()
+    {
+        return $this->hasMany('App\Bid');
+    }
 }

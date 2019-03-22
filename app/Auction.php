@@ -12,4 +12,12 @@ class Auction extends Model
      * @var array
      */
     protected $fillable = ['car_name', 'final_price', 'start_bid_amount', 'location', 'end_time'];
+
+     /**
+     * Get the Bids for the Auctions.
+     */
+    public function Bids()
+    {
+        return $this->hasMany('App\Bid');
+    }
 }
