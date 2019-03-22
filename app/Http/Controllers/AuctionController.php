@@ -3,10 +3,47 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Auction;
 
 class AuctionController extends Controller
 {
+    /**
+     * Get all Auctions
+     * 
+     * @return Response
+     */
+    public function allAuctions()
+    {
+        $auctions = Auction::all();
+        
+        return response()->json(['auctions' => $auctions]);
+    }
+
+    /**
+     * Get open Auctions
+     * 
+     * @return Response
+     */
+    public function openAuctions()
+    {
+        $auctions = Auction::where('end_time', '>', Carbon::now())->get();
+        
+        return response()->json(['auctions' => $auctions]);
+    }
+
+    /**
+     * Get close Auctions
+     * 
+     * @return Response
+     */
+    public function closedAuctions()
+    {
+        $auctions = Auction::where('end_time', '<=', Carbon::now())->get();
+        
+        return response()->json(['auctions' => $auctions]);
+    }
+
     /**
      * Store Auction in database
      * 
@@ -19,8 +56,7 @@ class AuctionController extends Controller
             'car_name' => 'required|min:2',
             'start_bid_amount' => 'required|numeric',
             'location'  => 'required|min:6',
-            'end_time' => 'required|date|after:today',
-            'auction_status' => 'required|boolean'
+            'end_time' => 'required|date|after:today'
         ]);
         
         Auction::create([
@@ -45,9 +81,10 @@ class AuctionController extends Controller
     public function delete(Request $request)
     {
         $auction = Auction::find($request->id);
-        if($auction) {
+        
+        if($auction)
             $auction->delete();
-        }
+
         return response()->json([
             "message" => "Ok"
         ]);

@@ -23,6 +23,9 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     // Auction Routes
     Route::prefix('auctions')->middleware('role:admin')->group(function() {
+        Route::get('all', 'AuctionController@allAuctions');
+        Route::get('open', 'AuctionController@openAuctions');
+        Route::get('closed', 'AuctionController@closedAuctions');
         Route::post('create', 'AuctionController@store');
         Route::delete('delete', 'AuctionController@delete');        
     });
