@@ -18,7 +18,7 @@ class BidController extends Controller
     {
         $request->validate([
             'auc_id' => 'required|numeric',
-            'amount' => 'required|numeric'
+            'amount' => 'required|numeric|lt:100000'
         ]);
         
         $auction = Auction::find($request->auc_id);
@@ -48,6 +48,10 @@ class BidController extends Controller
             return response()->json([
                 "message" => "Bid added successfully"
             ], 201);
+        } else {
+            return response()->json([
+                "message" => "You're allowed to create one bid for every auction :)"
+            ], 422);
         }
     }
 }

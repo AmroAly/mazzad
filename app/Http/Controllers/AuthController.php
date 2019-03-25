@@ -39,7 +39,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|string|email',
-            'password' => 'required|string'
+            'password' => 'required|min:6'
         ]);
 
         $credentials = request(['email', 'password']);
@@ -58,6 +58,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
+            'is_admin' => $user->hasRole('admin'),
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString()
@@ -84,6 +85,8 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        return response()->json([
+            "user" => $request->user()
+        ]);
     }
 }

@@ -11,5 +11,10 @@ class Image extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'user_id'];
+
+    public function auction()
+    {
+        $this->belongsTo('App\Auction');
+    }
 }

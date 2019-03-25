@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Auction;
+use App\Image as ImageUploader;
+use Image;
 
 class AuctionController extends Controller
 {
@@ -15,7 +17,7 @@ class AuctionController extends Controller
      */
     public function allAuctions()
     {
-        $auctions = Auction::all();
+        $auctions = Auction::with(['bids', 'image'])->get();
         
         return response()->json(['auctions' => $auctions]);
     }
@@ -27,7 +29,7 @@ class AuctionController extends Controller
      */
     public function openAuctions()
     {
-        $auctions = Auction::where('end_time', '>', Carbon::now())->get();
+        $auctions = Auction::with('image')->where('end_time', '>', Carbon::now())->get();
         
         return response()->json(['auctions' => $auctions]);
     }
@@ -39,7 +41,7 @@ class AuctionController extends Controller
      */
     public function closedAuctions()
     {
-        $auctions = Auction::where('end_time', '<=', Carbon::now())->get();
+        $auctions = Auction::with('image')->where('end_time', '<=', Carbon::now())->get();
         
         return response()->json(['auctions' => $auctions]);
     }
@@ -55,17 +57,30 @@ class AuctionController extends Controller
         $request->validate([
             'car_name' => 'required|min:2',
             'start_bid_amount' => 'required|numeric',
-            'location'  => 'required|min:6',
-            'end_time' => 'required|date|after:today'
+            'location'  => 'required|min:5',
+            'end_time' => 'required|date|after:today',
+            'image' => 'required'
         ]);
         
-        Auction::create([
+        $auction = Auction::create([
             'car_name' => $request->car_name,
             'start_bid_amount' => $request->start_bid_amount,
             'final_price' => $request->start_bid_amount,
             'location' => $request->location,
             'end_time' => $request->end_time,
         ]);
+
+        if($request->get('image'))
+       {
+          $image = $request->get('image');
+          $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
+          \Image::make($request->get('image'))->save(public_path('images/').$name);
+        }
+
+       $image= new ImageUploader();
+       $image->name = $name;
+       $image->auction_id = $auction->id;
+       $image->save();
 
         return response()->json([
             "message" => "Auction created successflly!"
@@ -81,20 +96,20 @@ class AuctionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'car_name' => 'required|min:2',
-            'start_bid_amount' => 'required|numeric',
-            'location'  => 'required|min:6',
-            'end_time' => 'required|date|after:today'
-        ]);
-        
-        Auction::where('id', $id)->update([
-            'car_name' => $request->car_name,
-            'start_bid_amount' => $request->start_bid_amount,
-            'final_price' => $request->final_price,
-            'location' => $request->location,
-            'end_time' => $request->end_time,
-        ]); 
+        // if it's a close auction request
+        if($request->close) {
+            Auction::where('id', $id)->update([
+                'end_time' => Carbon::now(),
+            ]); 
+        } else {
+            $request->validate([
+                'end_time' => 'required|date|after:today'
+            ]);
+            
+            Auction::where('id', $id)->update([
+                'end_time' => $request->end_time,
+            ]); 
+        }        
 
         return response()->json([
             "message" => "Auction updated successflly!"
@@ -111,8 +126,10 @@ class AuctionController extends Controller
     {
         $auction = Auction::find($request->id);
         
-        if($auction)
+        if($auction) {
+            $auction->bids()->delete();
             $auction->delete();
+        }
 
         return response()->json([
             "message" => "Ok"

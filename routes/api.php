@@ -17,14 +17,14 @@ use Illuminate\Http\Request;
 Route::post('/register', 'AuthController@store');
 Route::post('/login', 'AuthController@login');
 
+Route::get('auctions/open', 'AuctionController@openAuctions');
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::get('logout', 'AuthController@logout');
+    Route::post('logout', 'AuthController@logout');
     Route::get('user', 'AuthController@user');
-
+    
     // Auction Routes
     Route::prefix('auctions')->middleware('role:admin')->group(function() {
         Route::get('all', 'AuctionController@allAuctions');
-        Route::get('open', 'AuctionController@openAuctions');
         Route::get('closed', 'AuctionController@closedAuctions');
         Route::get('{id}/bids', 'AuctionController@bids');
         Route::post('create', 'AuctionController@store');

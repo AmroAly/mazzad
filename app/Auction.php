@@ -20,4 +20,9 @@ class Auction extends Model
     {
         return $this->hasMany('App\Bid');
     }
+
+    public function image()
+    {
+        return $this->hasOne('App\Image');
+    }
 }
