@@ -1903,7 +1903,7 @@ __webpack_require__.r(__webpack_exports__);
                 icon: "success"
               }).then(function () {
                 // update the view
-                document.querySelector("#final-price-".concat(id)).innerText = "$ ".concat(bid);
+                document.querySelector("#final-price-".concat(id)).innerText = "$ ".concat(parseFloat(bid).toFixed(2));
               });
             }).catch(function (e) {
               if (e.response.status == 422 && e.response.data.message && !e.response.data.errors) {

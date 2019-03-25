@@ -36,7 +36,7 @@ Go to your mysql client and create a database
 And let's run the migration to the database tables
 
 ```
-    php artisan migrate
+    php artisan migrate --seed
 ```
 
 Last but not least we will generate the personal access keys used by Laravel passport
@@ -56,4 +56,11 @@ I've crreated admin user using the laravel facrtory so you can signin as an Admi
 ```
     email: admin@mazzad.com
     password: secret
+```
+
+And Now let's run the server on `localhost:8000`
+
+```
+    php artisan serve
+
 ```

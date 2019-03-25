@@ -80,7 +80,7 @@
                                 })
                                 .then(() => {
                                     // update the view
-                                    document.querySelector(`#final-price-${id}`).innerText = `$ ${bid}`;
+                                    document.querySelector(`#final-price-${id}`).innerText = `$ ${parseFloat(bid).toFixed(2)}`;
                                 })
                             })
                             .catch(e => {
