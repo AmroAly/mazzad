@@ -1,6 +1,6 @@
 ## Mazzad App
 
-# Built with Laravel + Vuejs
+# Built with Laravel + Vuejs + Tailwindcss
 
 ### Up and running
 
@@ -23,6 +23,9 @@ Then install the dependencies
     cp .env.example .env
 ```
 Go to your mysql client and create a database
+
+Then let's modify the `.env` file to add the database credentials
+
 ```
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
